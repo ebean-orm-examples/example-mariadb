@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,7 +20,8 @@ public class Payment extends BaseModel {
     // When adding precision and scale i get an error saving
     private BigDecimal amount;
     String currency;
-    Timestamp payedAt;
+    Instant payedAt;
+    LocalDateTime executedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     Worker worker;
 }

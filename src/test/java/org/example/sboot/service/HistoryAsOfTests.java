@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -67,7 +68,9 @@ public class HistoryAsOfTests {
     Payment payment = new Payment();
     payment.setAmount(BigDecimal.valueOf(1000.2));
     payment.setCurrency("USD");
-    payment.setPayedAt(Timestamp.from(Instant.now()));
+    //payment.setPayedAt(Timestamp.from(Instant.now()));
+    payment.setPayedAt(Instant.now());
+    payment.setExecutedAt(LocalDateTime.now());
     worker.getPayments().add(payment);
     workerRepository.save(worker);
 
