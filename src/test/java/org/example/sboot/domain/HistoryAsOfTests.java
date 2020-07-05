@@ -1,15 +1,11 @@
-package org.example.sboot.service;
+package org.example.sboot.domain;
 
+import io.ebean.DB;
 import io.ebean.Version;
-import org.example.sboot.domain.Contract;
-import org.example.sboot.domain.Payment;
-import org.example.sboot.domain.Worker;
+import io.ebean.test.UserContext;
+import org.example.sboot.TestUtils;
 import org.example.sboot.domain.repo.WorkerRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -20,18 +16,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class HistoryAsOfTests {
 
-  @Autowired
-  WorkerRepository workerRepository;
+  WorkerRepository workerRepository = new WorkerRepository(DB.getDefault());
 
   @Test
-  public void testAsOfQueries() {
+  public void testHistoryQueries() {
+    UserContext.setUserId("U1");
 
     // Initial worker creation
     Worker worker = new Worker();
@@ -42,39 +34,38 @@ public class HistoryAsOfTests {
 
     workerRepository.save(worker);
 
-    sleep();
+    TestUtils.sleep(10);
     Timestamp tsV1 = Timestamp.from(Instant.now());
-    sleep();
+    TestUtils.sleep(10);
 
     // First update
     worker.setMaritalStatus("Married");
-    worker.setDateOfBirth(getDate("25-07-1986"));
+    worker.setDateOfBirth(TestUtils.getDate("25-07-1986"));
     Contract contract = new Contract();
     contract.setBaseSalary(1000);
     contract.setProjectName("Project1");
-    contract.setStartDate(getDate("01-01-2020"));
+    contract.setStartDate(TestUtils.getDate("01-01-2020"));
     worker.getContracts().add(contract);
 
     workerRepository.save(worker);
 
-    sleep();
+    TestUtils.sleep(10);
     Timestamp tsV2 = Timestamp.from(Instant.now());
-    sleep();
+    TestUtils.sleep(10);
 
     // Second update
     worker.setNumOfChildren(1);
-    contract.setEndDate(getDate("01-04-2020"));
+    contract.setEndDate(TestUtils.getDate("01-04-2020"));
     contract.setBaseSalary(2000);
     Payment payment = new Payment();
-    payment.setAmount(BigDecimal.valueOf(1000.2));
-    payment.setCurrency("USD");
-    //payment.setPayedAt(Timestamp.from(Instant.now()));
+    payment.setPayedAmount(BigDecimal.valueOf(1000.2));
+    payment.setPayedAmountCurrency("USD");
     payment.setPayedAt(Instant.now());
     payment.setExecutedAt(LocalDateTime.now());
     worker.getPayments().add(payment);
     workerRepository.save(worker);
 
-    sleep();
+    TestUtils.sleep(10);
     Timestamp tsV3 = Timestamp.from(Instant.now());
 
     Worker workerV1 = workerRepository.findVersionAsOfById(worker.getId(), tsV1);
@@ -101,19 +92,4 @@ public class HistoryAsOfTests {
     assertEquals(2, workerVersions.size());
   }
 
-  private void sleep() {
-    try {
-      Thread.sleep(10000);
-    } catch (Exception ex) {
-    }
-  }
-
-  private Date getDate(String dateStr) {
-    try {
-      SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-      return new Date(formatter.parse(dateStr).getTime());
-    } catch (Exception ex) {
-      return null;
-    }
-  }
 }

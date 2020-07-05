@@ -4,6 +4,10 @@ import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.config.MatchingNamingConvention;
+import io.ebean.config.ServerConfig;
+import org.example.sboot.domain.Contract;
+import org.example.sboot.domain.Payment;
+import org.example.sboot.domain.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,26 +23,15 @@ public class EBeanConfiguration {
     @Bean
     public DatabaseConfig ebeanServerConfig(DataSource dataSource) {
         DatabaseConfig config = new DatabaseConfig();
-        config.setName("ebeanServer");
-        config.setNamingConvention(new MatchingNamingConvention());
-        config.setDefaultServer(true);
         config.setDataSource(dataSource);
         config.setCurrentUserProvider(currentUser);
-        //config.setDdlInitSql("schema.sql");
-        config.setDdlGenerate(true);
-        config.setDdlRun(true);
         config.setDataTimeZone("UTC");
-
-        //config.addPackage("com.clevergang.dbtests.repository.impl.ebean.entities");
-        //config.setExternalTransactionManager(new SpringJdbcTransactionManager());
-        //config.setExpressionNativeIlike(true);
-        //config.loadFromProperties();
+        config.loadFromProperties();
         return config;
     }
 
     @Bean
     public Database ebeanDatabase(DatabaseConfig databaseConfig) {
-
         return DatabaseFactory.create(databaseConfig);
     }
 }
