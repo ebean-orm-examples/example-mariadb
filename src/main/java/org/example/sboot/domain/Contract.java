@@ -1,6 +1,7 @@
 package org.example.sboot.domain;
 
 import io.ebean.annotation.History;
+import io.leangen.graphql.annotations.GraphQLQuery;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import java.sql.Date;
 @History
 @Table(name = "worker_contract")
 public class Contract extends BaseModel {
+    @GraphQLQuery(name = "projectName", description = "Worker's first name")
     String projectName;
     Date startDate;
     Date endDate;
