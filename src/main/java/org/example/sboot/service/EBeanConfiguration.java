@@ -3,11 +3,6 @@ package org.example.sboot.service;
 import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.config.DatabaseConfig;
-import io.ebean.config.MatchingNamingConvention;
-import io.ebean.config.ServerConfig;
-import org.example.sboot.domain.Contract;
-import org.example.sboot.domain.Payment;
-import org.example.sboot.domain.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,4 +30,3 @@ public class EBeanConfiguration {
         return DatabaseFactory.create(databaseConfig);
     }
 }
-

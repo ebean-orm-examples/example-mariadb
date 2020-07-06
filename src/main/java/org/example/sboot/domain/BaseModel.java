@@ -35,5 +35,4 @@ public class BaseModel extends Model {
 
   @SoftDelete
   boolean deleted;
-
 }

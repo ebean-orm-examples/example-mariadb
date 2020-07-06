@@ -23,7 +23,6 @@ public class Worker extends BaseModel {
     @GraphQLQuery(name = "maritalStatus", description = "marital Status")
     String maritalStatus;
     @GraphQLQuery(name = "numOfChildren", description = "Num Of children")
-
     int numOfChildren;
     Date dateOfBirth;
     @OneToMany(
@@ -40,12 +39,4 @@ public class Worker extends BaseModel {
     )
     @GraphQLQuery(name = "payments", description = "Worker Payments")
     List<Payment> payments;
-
-    public String getFirstName() {
-      return this.firstName;
-    }
-
-    public void setFirstName(String firstName) {
-      this.firstName = firstName;
-    }
 }
